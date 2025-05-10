@@ -1,0 +1,12 @@
+export default function AddTask({ onClick }) {
+  return (
+    <div className="flex justify-center items-center pb-5 mt-2">
+      <button
+        className="px-6 py-2 bg-black text-white rounded-lg hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] flex items-center space-x-2 cursor-pointer transition-all border-black  border-b-[2px]"
+        onClick={onClick}
+      >
+        +
+      </button>
+    </div>
+  );
+}
