@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -35,8 +34,8 @@ export default function AddDialog({ isOpenDialog, setIsOpenDialog }) {
 
   return (
     <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
-      <DialogContent className="w-[65%] font-mono text-sm">
-        <DialogHeader className="items-center">
+      <DialogContent className="w-[65%] font-mono text-sm" aria-describedby={undefined}>
+        <DialogHeader className="items-center" >
           <DialogTitle>Add a Task</DialogTitle>
         </DialogHeader>
 
