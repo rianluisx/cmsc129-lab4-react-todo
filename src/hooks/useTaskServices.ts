@@ -1,4 +1,4 @@
-import { error } from "console";
+
 import Task from "../types/task";
 
 export default function useTaskServices() {
@@ -7,7 +7,7 @@ export default function useTaskServices() {
   async function getTasks(): Promise<Task[]> {
     const res = await fetch(API_URL);
     if (!res.ok) {
-      console.error(error);
+      console.error("Failed to fetch tasks");
     }
 
     return await res.json();
@@ -20,7 +20,7 @@ export default function useTaskServices() {
       body: JSON.stringify(task),
     });
     if (!res.ok) {
-      console.error(error);
+      console.error("Failed to add tasks");
     }
     return await res.json();
   }
@@ -32,7 +32,7 @@ export default function useTaskServices() {
       body: JSON.stringify(task),
     });
     if (!res.ok) {
-      console.error(error);
+      console.error("Failed to udpate toggle");
     }
     return await res.json();
   }
@@ -44,7 +44,7 @@ export default function useTaskServices() {
       body: JSON.stringify(task),
     });
     if (!res.ok) {
-      console.error(error);
+      console.error("Failed to fetch edit task");
     }
     return await res.json();
   }
@@ -54,7 +54,7 @@ export default function useTaskServices() {
       method: "DELETE",
     });
     if (!res.ok) {
-      console.error(error);
+      console.error("Failed to remove task");
     }
   }
 
@@ -65,7 +65,7 @@ export default function useTaskServices() {
       body: JSON.stringify(task),
     });
     if (!res.ok) {
-      console.error(error);
+      console.log("Failed to undo delete");
     }
     return await res.json();
   }
