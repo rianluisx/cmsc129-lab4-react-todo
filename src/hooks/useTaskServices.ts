@@ -1,72 +1,67 @@
+import axios from "axios";
 import Task from "../types/task";
 
 export default function useTaskServices() {
   const API_URL = "http://localhost:5000/tasks";
 
   async function getTasks(): Promise<Task[]> {
-    const res = await fetch(API_URL);
-    if (!res.ok) {
-      console.error("Failed to fetch tasks");
-    }
-
-    return await res.json();
-  }
-
-  async function addTask(task: Omit<Task, "id">): Promise<Task> {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(task),
-    });
-    if (!res.ok) {
-      console.error("Failed to add tasks");
-    }
-    return await res.json();
-  }
-
-  async function updateToggle(task: Task): Promise<Task> {
-    const res = await fetch(`${API_URL}/${task.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(task),
-    });
-    if (!res.ok) {
-      console.error("Failed to udpate toggle");
-    }
-    return await res.json();
-  }
-
-  async function editTask(task: Task): Promise<Task> {
-    const res = await fetch(`${API_URL}/${task.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(task),
-    });
-    if (!res.ok) {
-      console.error("Failed to fetch edit task");
-    }
-    return await res.json();
-  }
-
-  async function removeTask(taskId: number): Promise<void> {
-    const res = await fetch(`${API_URL}/${taskId}`, {
-      method: "DELETE",
-    });
-    if (!res.ok) {
-      console.error("Failed to remove task");
+    try {
+      const { data } = await axios.get<Task[]>(API_URL);
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch tasks", error);
+      return [];
     }
   }
 
-  async function undoDelete(task: Task): Promise<Task> {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(task),
-    });
-    if (!res.ok) {
-      console.log("Failed to undo delete");
+  async function addTask(task: Omit<Task, "id">): Promise<Task | null> {
+    try {
+      const { data } = await axios.post<Task>(API_URL, task);
+      return data;
+    } catch (error) {
+      console.error("Failed to add task", error);
+      return null;
     }
-    return await res.json();
+  }
+
+  async function updateToggle(task: Task): Promise<Task | null> {
+    try {
+      const { data } = await axios.put<Task>(`${API_URL}/${task.id}`, task);
+      return data;
+    } catch (error) {
+      console.error("Failed to update toggle", error);
+      return null;
+    }
+  }
+
+  async function editTask(task: Task): Promise<Task | null> {
+    try {
+      const { data } = await axios.put<Task>(`${API_URL}/${task.id}`, task);
+      return data;
+    } catch (error) {
+      console.error("Failed to edit task", error);
+      return null;
+    }
+  }
+
+  async function removeTask(taskId: number): Promise<boolean> {
+    try {
+      await axios.delete(`${API_URL}/${taskId}`);
+      return true;
+    } catch (error) {
+      console.error("Failed to remove task", error);
+      return false;
+    }
+  }
+
+  async function undoDelete(task: Task): Promise<Task | null> {
+    try {
+      const { data } = await axios.post<Task>(API_URL, task);
+      return data;
+    } catch (error) {
+      console.error("Failed to undo delete", error);
+      return null;
+    }
   }
 
   return { addTask, removeTask, editTask, undoDelete, updateToggle, getTasks };
