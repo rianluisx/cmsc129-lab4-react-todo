@@ -7,7 +7,7 @@
       "dueTime": "06:42",
       "priority": "Low",
       "dateAdded": "2025-05-12",
-      "status": true
+      "status": false
     },
     {
       "id": "eefb",
@@ -34,7 +34,7 @@
       "dueTime": "05:16",
       "priority": "High",
       "dateAdded": "2025-05-12",
-      "status": true
+      "status": false
     }
   ]
 }

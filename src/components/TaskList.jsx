@@ -1,3 +1,5 @@
+import { FaEdit, FaTrash } from "react-icons/fa";
+
 export default function TaskList({ tasks, onToggleTask }) {
   if (tasks.length === 0) {
     return (
@@ -44,6 +46,23 @@ export default function TaskList({ tasks, onToggleTask }) {
                 Priority: {task.priority}
               </p>
             </div>
+          </div>
+          <div className="flex space-x-3">
+            <button
+              className="text-blue-500 hover:text-blue-700 flex items-center cursor-pointer"
+              onClick={() => openEditDialog(task)}
+              aria-label="Edit Task"
+            >
+              <FaEdit />
+            </button>
+
+            <button
+              className="text-red-500 hover:text-red-700 flex items-center cursor-pointer"
+              onClick={() => openDeleteDialog(task)}
+              aria-label="Delete Task"
+            >
+              <FaTrash />
+            </button>
           </div>
         </li>
       ))}
