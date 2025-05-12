@@ -16,7 +16,7 @@ function ToDoList() {
     <>
       <div className=" max-w-[500px] overflow-auto min-h-[300px]  mx-auto my-[30px] p-[30px] rounded-[5px]">
         <Header />
-        <AddTask />
+        <AddTask addTask={addTask}/>
         <SortTasks sortBy={sortBy} changeSorting={changeSorting} />
       </div>
     </>

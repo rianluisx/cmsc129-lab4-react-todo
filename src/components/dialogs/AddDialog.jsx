@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export default function AddDialog({ isOpenDialog, setIsOpenDialog }) {
+export default function AddDialog({ isOpenDialog, setIsOpenDialog, addTask }) {
   const {
     register,
     handleSubmit,
@@ -21,10 +21,20 @@ export default function AddDialog({ isOpenDialog, setIsOpenDialog }) {
     },
   });
 
+  async function submitData(data) {
+    const newTask = {
+      ...data,
+      dateAdded: new Date().toISOString().split("T")[0],
+      status: false,
+    };
 
-  function submitData(data) {
-    console.log("Form Data:", data);
-    setIsOpenDialog(false);
+    try {
+      const addedTask = await addTask(newTask);
+      console.log(addedTask);
+      setIsOpenDialog(false);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function cancelSubmit() {
@@ -34,8 +44,11 @@ export default function AddDialog({ isOpenDialog, setIsOpenDialog }) {
 
   return (
     <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
-      <DialogContent className="w-[65%] font-mono text-sm" aria-describedby={undefined}>
-        <DialogHeader className="items-center" >
+      <DialogContent
+        className="w-[65%] font-mono text-sm"
+        aria-describedby={undefined}
+      >
+        <DialogHeader className="items-center">
           <DialogTitle>Add a Task</DialogTitle>
         </DialogHeader>
 

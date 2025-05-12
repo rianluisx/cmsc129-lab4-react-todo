@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddDialog from "./dialogs/AddDialog";
 
-export default function AddTask() {
+export default function AddTask({addTask}) {
 
   const [isOpenDialog, setIsOpenDialog] = useState(false);
 
@@ -18,6 +18,7 @@ export default function AddTask() {
       <AddDialog
         isOpenDialog={isOpenDialog}
         setIsOpenDialog={setIsOpenDialog}
+        addTask={addTask}
       />
     </>
   );
