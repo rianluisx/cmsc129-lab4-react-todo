@@ -46,7 +46,7 @@ function ToDoList() {
       <Header />
       <AddTask addTask={addTask} />
       <SortTasks sortBy={sortBy} changeSorting={changeSorting} />
-      <TaskList tasks={sortedTasks} onToggleTask={handleToggleTask} />
+      <TaskList tasks={sortedTasks} onToggleTask={handleToggleTask} removeTask={removeTask}/>
     </div>
   );
 }

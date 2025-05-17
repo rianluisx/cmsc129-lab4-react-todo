@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export default function AddDialog({ isOpenDialog, setIsOpenDialog, addTask }) {
+export default function EditDialog({ isOpenDialog, setIsOpenDialog, editTask, task }) {
   const {
     register,
     handleSubmit,
@@ -29,7 +29,8 @@ export default function AddDialog({ isOpenDialog, setIsOpenDialog, addTask }) {
     };
 
     try {
-      const addedTask = await addTask(newTask);
+      const addedTask = await updateTask(newTask);
+      console.log(addedTask);
       setIsOpenDialog(false);
     } catch (error) {
       console.error(error);

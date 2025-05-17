@@ -1,6 +1,12 @@
 import { FaEdit, FaTrash } from "react-icons/fa";
+import DeleteDialog from "./dialogs/DeleteDialog";
+import { useState } from "react";
 
-export default function TaskList({ tasks, onToggleTask }) {
+export default function TaskList({ tasks, onToggleTask, removeTask }) {
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  
   if (tasks.length === 0) {
     return (
       <div className="p-4 text-center text-gray-500 text-xl">
@@ -10,62 +16,72 @@ export default function TaskList({ tasks, onToggleTask }) {
   }
 
   return (
-    <ul className="space-y-4">
-      {tasks.map((task) => (
-        <li
-          key={task.id}
-          className={`p-4 bg-white shadow-md rounded-lg border-l-4 flex justify-between items-center transition-all duration-300 hover:shadow-lg ${
-            task.priority === "High"
-              ? "border-red-500"
-              : task.priority === "Medium"
-              ? "border-yellow-500"
-              : "border-green-500"
-          }`}
-        >
-          <div className="flex items-center space-x-3">
-            <input
-              type="checkbox"
-              checked={task.status}
-              onChange={() => onToggleTask(task)}
-              className="w-5 h-5 accent-gray-800"
-              aria-label="check"
-            />
-            <div className={task.status ? "line-through text-gray-400" : ""}>
-              <h3 className="text-lg font-semibold">{task.title}</h3>
-              <p className="text-sm text-gray-500">Due Date: {task.dueDate}</p>
-              <p className="text-sm text-gray-500">Due Time: {task.dueTime}</p>
-              <p
-                className={`text-xs font-bold ${
-                  task.priority === "High"
-                    ? "text-red-500"
-                    : task.priority === "Medium"
-                    ? "text-yellow-500"
-                    : "text-green-500"
-                }`}
-              >
-                Priority: {task.priority}
-              </p>
+    <>
+      <ul className="space-y-4">
+        {tasks.map((task) => (
+          <li
+            key={task.id}
+            className={`p-4 bg-white shadow-md rounded-lg border-l-4 flex justify-between items-center transition-all duration-300 hover:shadow-lg ${
+              task.priority === "High"
+                ? "border-red-500"
+                : task.priority === "Medium"
+                ? "border-yellow-500"
+                : "border-green-500"
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={task.status}
+                onChange={() => onToggleTask(task)}
+                className="w-5 h-5 accent-gray-800"
+                aria-label="check"
+              />
+              <div className={task.status ? "line-through text-gray-400" : ""}>
+                <h3 className="text-lg font-semibold">{task.title}</h3>
+                <p className="text-sm text-gray-500">
+                  Due Date: {task.dueDate}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Due Time: {task.dueTime}
+                </p>
+                <p
+                  className={`text-xs font-bold ${
+                    task.priority === "High"
+                      ? "text-red-500"
+                      : task.priority === "Medium"
+                      ? "text-yellow-500"
+                      : "text-green-500"
+                  }`}
+                >
+                  Priority: {task.priority}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex space-x-3">
-            <button
-              className="text-blue-500 hover:text-blue-700 flex items-center cursor-pointer"
-              onClick={() => openEditDialog(task)}
-              aria-label="Edit Task"
-            >
-              <FaEdit />
-            </button>
+            <div className="flex space-x-3">
+              <button
+                className="text-blue-500 hover:text-blue-700 flex items-center cursor-pointer"
+                onClick={() => openEditDialog(task)}
+                aria-label="Edit Task"
+              >
+                <FaEdit />
+              </button>
 
-            <button
-              className="text-red-500 hover:text-red-700 flex items-center cursor-pointer"
-              onClick={() => openDeleteDialog(task)}
-              aria-label="Delete Task"
-            >
-              <FaTrash />
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+              <button
+                className="text-red-500 hover:text-red-700 flex items-center cursor-pointer"
+                onClick={() => {
+                  setSelectedTask(task);
+                  setIsOpenDialog(true);
+                }}
+                aria-label="Delete Task"
+              >
+                <FaTrash />
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <DeleteDialog isOpenDialog={isOpenDialog} setIsOpenDialog={setIsOpenDialog} task={selectedTask} removeTask={removeTask} />
+    </>
   );
 }
