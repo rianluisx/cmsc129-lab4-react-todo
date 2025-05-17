@@ -25,12 +25,14 @@ export default function AddDialog({ isOpenDialog, setIsOpenDialog, addTask }) {
     const newTask = {
       ...data,
       dateAdded: new Date().toISOString().split("T")[0],
+      dateUpdated: new Date().toISOString(),
       status: false,
     };
 
     try {
-      const addedTask = await addTask(newTask);
+      await addTask(newTask);
       setIsOpenDialog(false);
+      reset();
     } catch (error) {
       console.error(error);
     }
@@ -57,10 +59,14 @@ export default function AddDialog({ isOpenDialog, setIsOpenDialog, addTask }) {
             <input
               type="text"
               className="border rounded px-2 py-1"
-              {...register("title", { required: true })}
+              {...register("title", {
+                required: "Title is required.",
+                validate: (value) =>
+                  value.trim() !== "",
+              })}
             />
             {isSubmitted && errors.title && (
-              <div className="text-red-500 text-sm">Title is required.</div>
+              <div className="text-red-500 text-sm">Title is required and shouldn't be empty.</div>
             )}
 
             <label>Due Date</label>

@@ -5,8 +5,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useEffect } from "react";
 
-export default function EditDialog({ isOpenDialog, setIsOpenDialog, editTask, task }) {
+export default function EditDialog({
+  isOpenDialog,
+  setIsOpenDialog,
+  editTask,
+  task,
+}) {
   const {
     register,
     handleSubmit,
@@ -21,16 +27,24 @@ export default function EditDialog({ isOpenDialog, setIsOpenDialog, editTask, ta
     },
   });
 
-  async function submitData(data) {
-    const newTask = {
-      ...data,
-      dateAdded: new Date().toISOString().split("T")[0],
-      status: false,
-    };
+  useEffect(() => {
+    if (task) {
+      reset({
+        title: task.title,
+        dueDate: task.dueDate,
+        dueTime: task.dueTime,
+        priority: task.priority,
+      });
+    }
+  }, [task, reset]);
 
+  async function updateData(data) {
     try {
-      const addedTask = await updateTask(newTask);
-      console.log(addedTask);
+      await editTask({
+        ...task,
+        ...data,
+        dateUpdated: new Date().toISOString(),
+      });
       setIsOpenDialog(false);
     } catch (error) {
       console.error(error);
@@ -49,16 +63,21 @@ export default function EditDialog({ isOpenDialog, setIsOpenDialog, editTask, ta
         aria-describedby={undefined}
       >
         <DialogHeader className="items-center">
-          <DialogTitle>Add a Task</DialogTitle>
+          <DialogTitle>Edit Task</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(submitData)} className="text-center">
+        <form onSubmit={handleSubmit(updateData)} className="text-center">
           <div className="flex flex-col gap-4">
             <label>Task</label>
             <input
               type="text"
               className="border rounded px-2 py-1"
-              {...register("title", { required: true })}
+              defaultValue={task?.title}
+              {...register("title", {
+                required: "Title is required.",
+                validate: (value) =>
+                  value.trim() !== "" || "Title cannot be just blank spaces.",
+              })}
             />
             {isSubmitted && errors.title && (
               <div className="text-red-500 text-sm">Title is required.</div>
@@ -68,6 +87,7 @@ export default function EditDialog({ isOpenDialog, setIsOpenDialog, editTask, ta
             <input
               type="date"
               className="border rounded px-2 py-1"
+              defaultValue={task?.dueDate}
               {...register("dueDate", { required: true })}
             />
             {isSubmitted && errors.dueDate && (
@@ -78,6 +98,7 @@ export default function EditDialog({ isOpenDialog, setIsOpenDialog, editTask, ta
             <input
               type="time"
               className="border rounded px-2 py-1"
+              defaultValue={task?.dueTime}
               {...register("dueTime", { required: true })}
             />
             {isSubmitted && errors.dueTime && (
@@ -87,6 +108,7 @@ export default function EditDialog({ isOpenDialog, setIsOpenDialog, editTask, ta
             <label>Priority</label>
             <select
               className="border rounded px-2 py-1"
+              defaultValue={task?.priority}
               {...register("priority", { required: true })}
             >
               <option value="High">High</option>
@@ -107,7 +129,7 @@ export default function EditDialog({ isOpenDialog, setIsOpenDialog, editTask, ta
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-800 cursor-pointer transition-all"
             >
-              Add
+              Save
             </button>
           </div>
         </form>

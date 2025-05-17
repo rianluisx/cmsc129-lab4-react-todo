@@ -1,9 +1,11 @@
 import { FaEdit, FaTrash } from "react-icons/fa";
 import DeleteDialog from "./dialogs/DeleteDialog";
 import { useState } from "react";
+import EditDialog from "./dialogs/EditDialog";
 
-export default function TaskList({ tasks, onToggleTask, removeTask }) {
-  const [isOpenDialog, setIsOpenDialog] = useState(false);
+export default function TaskList({ tasks, onToggleTask, removeTask, editTask }) {
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [isOpenEditDialog, setIsOpenEditDialog] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
   
@@ -40,6 +42,9 @@ export default function TaskList({ tasks, onToggleTask, removeTask }) {
               <div className={task.status ? "line-through text-gray-400" : ""}>
                 <h3 className="text-lg font-semibold">{task.title}</h3>
                 <p className="text-sm text-gray-500">
+                  Date Added: {task.dateAdded}
+                </p>
+                <p className="text-sm text-gray-500">
                   Due Date: {task.dueDate}
                 </p>
                 <p className="text-sm text-gray-500">
@@ -61,7 +66,10 @@ export default function TaskList({ tasks, onToggleTask, removeTask }) {
             <div className="flex space-x-3">
               <button
                 className="text-blue-500 hover:text-blue-700 flex items-center cursor-pointer"
-                onClick={() => openEditDialog(task)}
+                onClick={() => {
+                  setIsOpenEditDialog(true);
+                  setSelectedTask(task);
+                }}
                 aria-label="Edit Task"
               >
                 <FaEdit />
@@ -71,7 +79,7 @@ export default function TaskList({ tasks, onToggleTask, removeTask }) {
                 className="text-red-500 hover:text-red-700 flex items-center cursor-pointer"
                 onClick={() => {
                   setSelectedTask(task);
-                  setIsOpenDialog(true);
+                  setIsOpenDeleteDialog(true);
                 }}
                 aria-label="Delete Task"
               >
@@ -81,7 +89,18 @@ export default function TaskList({ tasks, onToggleTask, removeTask }) {
           </li>
         ))}
       </ul>
-      <DeleteDialog isOpenDialog={isOpenDialog} setIsOpenDialog={setIsOpenDialog} task={selectedTask} removeTask={removeTask} />
+      <DeleteDialog
+        isOpenDialog={isOpenDeleteDialog}
+        setIsOpenDialog={setIsOpenDeleteDialog}
+        task={selectedTask}
+        removeTask={removeTask}
+      />
+      <EditDialog
+        isOpenDialog={isOpenEditDialog}
+        setIsOpenDialog={setIsOpenEditDialog}
+        task={selectedTask}
+        editTask={editTask}
+      />
     </>
   );
 }
