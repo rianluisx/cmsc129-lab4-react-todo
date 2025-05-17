@@ -5,6 +5,7 @@ import useTaskServices from "./hooks/useTaskServices";
 import TaskList from "./components/TaskList";
 import { useState, useEffect } from "react";
 
+
 function ToDoList() {
   const { addTask, editTask, removeTask, undoDelete, getTasks, updateToggle } =
     useTaskServices();
@@ -48,7 +49,7 @@ function ToDoList() {
       <Header />
       <AddTask addTask={addTask} />
       <SortTasks sortBy={sortBy} changeSorting={changeSorting} />
-      <TaskList tasks={sortedTasks} onToggleTask={handleToggleTask} removeTask={removeTask} editTask={editTask}/>
+      <TaskList tasks={sortedTasks} onToggleTask={handleToggleTask} removeTask={removeTask} editTask={editTask} undoDelete={undoDelete}/>
     </div>
   );
 }

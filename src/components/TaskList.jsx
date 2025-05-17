@@ -3,7 +3,7 @@ import DeleteDialog from "./dialogs/DeleteDialog";
 import { useState } from "react";
 import EditDialog from "./dialogs/EditDialog";
 
-export default function TaskList({ tasks, onToggleTask, removeTask, editTask }) {
+export default function TaskList({ tasks, onToggleTask, removeTask, editTask, undoDelete }) {
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [isOpenEditDialog, setIsOpenEditDialog] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -94,6 +94,7 @@ export default function TaskList({ tasks, onToggleTask, removeTask, editTask }) 
         setIsOpenDialog={setIsOpenDeleteDialog}
         task={selectedTask}
         removeTask={removeTask}
+        undoDelete={undoDelete}
       />
       <EditDialog
         isOpenDialog={isOpenEditDialog}

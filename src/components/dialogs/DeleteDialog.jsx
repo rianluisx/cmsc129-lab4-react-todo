@@ -4,20 +4,33 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 export default function DeleteDialog({
   isOpenDialog,
   setIsOpenDialog,
   removeTask,
   task,
+  undoDelete,
 }) {
   function cancelSubmit() {
     setIsOpenDialog(false);
   }
 
-  async function handleRemoveTask(taskId) {
+  async function handleRemoveTask(task) {
     try {
-      await removeTask(taskId);
+      await removeTask(task.id);
+      toast(`Deleted “${task.title}”`, {
+        description: "You can undo this action",
+        duration: 3000,
+        action: {
+          label: "Undo",
+          onClick: async () => {
+            await undoDelete(task);
+          },
+        },
+        variant: "destructive",
+      });
       setIsOpenDialog(false);
     } catch (error) {
       console.error(error);
@@ -36,7 +49,8 @@ export default function DeleteDialog({
           </DialogHeader>
 
           <div className="text-center mt-2">
-            Would you like to delete <span className="font-bold"> {task?.title}</span> ?
+            Would you like to delete{" "}
+            <span className="font-bold"> {task?.title}</span> ?
           </div>
 
           <div className="flex justify-center gap-4 mt-4">
@@ -49,7 +63,9 @@ export default function DeleteDialog({
             </button>
             <button
               type="button"
-              onClick={() => handleRemoveTask(task.id)}
+              onClick={() => {
+                handleRemoveTask(task);
+              }}
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer transition-all"
             >
               Delete
